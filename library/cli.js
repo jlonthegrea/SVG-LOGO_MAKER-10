@@ -3,55 +3,71 @@ const SVG = require("./svg");
 const {Circle, Triangle, Square} = require("./shapes");
 const {writeFile} = require("fs/promises");
 
+const inquirer = require("inquirer");
+const SVG = require("./svg");
+const { Circle, Triangle, Square } = require("./shapes");
+const { writeFile } = require("fs/promises");
+
 class CLI {
-    run() {
-        return inquirer
-        .prompt([
-            {
-                name: "text",
-                type: "input",
-                message: "Enter text to be placed inside the logo. (Must be no more than 3 characters.",
-                validate: (text) =>
-                text.length <= 3 || "The text entered cannot be more than 3 characters."
-            },
-            {
-                name: "textColor",
-                type: "input",
-                message: "What color would you like the text color to be?"
-            },
-            {
-                name: "logoShape",
-                type: "list",
-                message: "Please select the shape of your logo.",
-                choices: ["circle", "square", "triangle"]
-            },
-            {
-                name: "shapeColor",
-                type: "input",
-                message: "What color would you like the shape to be?"
-            }
-        ])
-        .then(({text, textColor, logoShape, shapeColor}) => {
-            let shape;
+  run() {
+    return inquirer
+      .prompt([
+        {
+          name: "text",
+          type: "input",
+          message:
+            "Enter text for the logo. (Must not be more than 3 characters.)",
+          validate: (text) =>
+            text.length <= 3 ||
+            "The message must not contain more than 3 characters",
+        },
+        {
+          name: "textColor",
+          type: "input",
+          message: "Enter a text color.",
+        },
+        {
+          name: "shapeType",
+          type: "list",
+          message: "Select a shape for the logo",
+          choices: ["circle", "square", "triangle"],
+        },
+        {
+          name: "shapeColor",
+          type: "input",
+          message: "Enter a shape color",
+        },
+      ])
+      .then(({ text, textColor, shapeType, shapeColor }) => {
+        let shape;
+        switch (shapeType) {
+          case "circle":
+            shape = new Circle();
+            break;
 
-            switch (logoShape) {
-                case "circle":
-                    shape = new Circle(shapeColor);
-                    break;
-                case "square":
-                    shape = new Square(shapeColor);
-                    break;
-                case "triangle":
-                    shape = new Triangle(shapeColor);
-                    break;
-            }
+          case "square":
+            shape = new Square();
+            break;
 
-            shape.setColor(shapeColor);
+          default:
+            shape = new Triangle();
+            break;
+        }
+        shape.setColor(shapeColor);
 
-            const svg = new SVG();
-            svg.setText(text, textColor);
-            svg.setShape(shape);
-            return writeFile("logo.svg", svg.render());
-        });
-    }
+        const svg = new SVG();
+        svg.setText(text, textColor);
+        svg.setShape(shape);
+        return writeFile("logo.svg", svg.render());
+      })
+      .then(() => {
+        console.log("Generated logo.svg");
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("Oops! Something went wrong.");
+      });
+  }
 }
+
+module.exports = CLI;
