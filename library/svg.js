@@ -4,7 +4,7 @@ class SVG {
         this.shapeElement = "";
     }
     render() {
-        return `<svg version="1.1" width="300" height"200" xmlns="https://www.w3.org/2000/svg">${this.shapeElement}${this.textElement}</svg>`;
+        return `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">${this.shapeElement}${this.textElement}</svg>`;
     }
     setText(message, color) {
         if(message.length > 3) {
