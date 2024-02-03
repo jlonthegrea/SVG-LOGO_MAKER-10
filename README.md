@@ -33,4 +33,4 @@ MIT License
 
 ## Video Link
  
- [text](<../MOD 10 SR.mov>)
+https://drive.google.com/file/d/1o5uwwMqfS4bDFeALMNaNQ5ywTSX_8HWJ/view?usp=drive_link
